@@ -1,6 +1,7 @@
 package equipment_management.auth.controller;
 
 import equipment_management.auth.dto.AuthResponse;
+import equipment_management.auth.dto.LoginRequest;
 import equipment_management.auth.dto.RegisterRequest;
 import equipment_management.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -18,5 +19,11 @@ public class AuthController {
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request)
     {
         return ResponseEntity.status(201).body(authService.register(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request)
+    {
+        return ResponseEntity.ok(authService.login(request));
     }
 }

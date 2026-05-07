@@ -1,6 +1,7 @@
 package equipment_management.auth.service;
 
 import equipment_management.auth.dto.AuthResponse;
+import equipment_management.auth.dto.LoginRequest;
 import equipment_management.auth.dto.RegisterRequest;
 import equipment_management.auth.entity.User;
 import equipment_management.auth.repository.UserRepository;
@@ -34,6 +35,20 @@ public class AuthService {
 
         String token = jwtService.generateToken(user.getEmail());
 
+        return new AuthResponse(token, user.getEmail(), user.getRole());
+    }
+
+    public AuthResponse login(LoginRequest request)
+    {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Email not found"));
+
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+        {
+            throw new RuntimeException("Wrong password");
+        }
+
+        String token = jwtService.generateToken(request.getEmail());
         return new AuthResponse(token, user.getEmail(), user.getRole());
     }
 }
