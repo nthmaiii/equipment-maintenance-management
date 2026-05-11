@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "equipments")
@@ -17,8 +20,15 @@ import java.time.LocalDateTime;
 public class Equipment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
+
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MaintenanceSchedule> schedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkOrder> workOrders = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;

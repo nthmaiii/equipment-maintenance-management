@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 public class EquipmentService {
     private final EquipmentRepository equipmentRepository;
 
-    public EquipmentResponse getById(Long id)
+    public EquipmentResponse getById(UUID id)
     {
         Equipment equipment = equipmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Equipment not found with id: " + id));
@@ -33,7 +34,7 @@ public class EquipmentService {
         return toResponse(equipmentRepository.save(equipment));
     }
 
-    public EquipmentResponse update(Long id, EquipmentRequest request) {
+    public EquipmentResponse update(UUID id, EquipmentRequest request) {
         Equipment equipment = equipmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Equipment not found with id: " + id));
         equipment.setName(request.getName());
@@ -44,7 +45,7 @@ public class EquipmentService {
         return toResponse(equipmentRepository.save(equipment));
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         equipmentRepository.deleteById(id);
     }
 

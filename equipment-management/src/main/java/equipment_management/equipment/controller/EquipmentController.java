@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/equipments")
@@ -23,7 +24,7 @@ public class EquipmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EquipmentResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<EquipmentResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(equipmentService.getById(id));
     }
 
@@ -36,13 +37,13 @@ public class EquipmentController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EquipmentResponse> update(@PathVariable Long id, @RequestBody EquipmentRequest request) {
+    public ResponseEntity<EquipmentResponse> update(@PathVariable UUID id, @RequestBody EquipmentRequest request) {
         return ResponseEntity.ok(equipmentService.update(id, request));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         equipmentService.delete(id);
         return ResponseEntity.noContent().build();
     }
