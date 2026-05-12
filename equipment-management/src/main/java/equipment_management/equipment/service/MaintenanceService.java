@@ -32,7 +32,6 @@ public class MaintenanceService {
                 .equipment(schedule.getEquipment())
                 .description("Bảo trì định kỳ: " + schedule.getDescription())
                 .status(WorkOrderStatus.OPEN)
-                .orderDate(LocalDate.now())
                 .build();
 
         workOrderRepository.save(workOrder);

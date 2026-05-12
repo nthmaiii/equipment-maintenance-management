@@ -39,17 +39,18 @@ public class JwtFilter extends OncePerRequestFilter {
         if(jwtService.isTokenValid(token))
         {
             String email = jwtService.extractEmail(token);
+            String role = jwtService.extractRole(token);
+
             User user = userRepository.findByEmail(email).orElse(null);
             if (user != null) {
-
                 List<GrantedAuthority> authorities = List.of(
-                        new SimpleGrantedAuthority("ROLE_" + user.getRole())
+                        new SimpleGrantedAuthority("ROLE_" + role)
                 );
 
 
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
-                                user.getEmail(),
+                                email,
                                 null,
                                 authorities
                         );

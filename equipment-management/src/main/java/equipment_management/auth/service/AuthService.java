@@ -33,7 +33,7 @@ public class AuthService {
                 .build();
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail(), user.getRole());
 
         return new AuthResponse(token, user.getEmail(), user.getRole());
     }
@@ -48,7 +48,7 @@ public class AuthService {
             throw new RuntimeException("Wrong password");
         }
 
-        String token = jwtService.generateToken(request.getEmail());
+        String token = jwtService.generateToken(request.getEmail(), user.getRole());
         return new AuthResponse(token, user.getEmail(), user.getRole());
     }
 }
