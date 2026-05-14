@@ -1,6 +1,6 @@
 package equipment_management.equipment.entity;
 
-import equipment_management.equipment.constant.ScheduleStatus;
+import equipment_management.equipment.enums.MaintenanceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -17,24 +17,17 @@ public class MaintenanceSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "equipment_id", nullable = false)
     private Equipment equipment;
 
-    private String description;
-
-    @Column(name = "interval_days", nullable = false)
-    private Integer intervalDays;
-
-    @Column(name = "last_maintenance_date")
-    private LocalDate lastMaintenanceDate;
-
-    @Column(name = "next_maintenance_date", nullable = false)
-    private LocalDate nextMaintenanceDate;
+    private LocalDate scheduledDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 20)
-    private ScheduleStatus status = ScheduleStatus.ACTIVE;
+    private MaintenanceStatus status;
+
+    private String description;
 }

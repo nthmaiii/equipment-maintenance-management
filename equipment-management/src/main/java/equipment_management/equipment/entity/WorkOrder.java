@@ -1,6 +1,6 @@
 package equipment_management.equipment.entity;
 
-import equipment_management.equipment.constant.WorkOrderStatus;
+import equipment_management.equipment.enums.WorkOrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -20,25 +20,18 @@ public class WorkOrder {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "equipment_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "maintenance_schedule_id", nullable = true)
+    private MaintenanceSchedule maintenanceSchedule;
+
+    @ManyToOne
+    @JoinColumn(name = "equipment_id", nullable = true)
     private Equipment equipment;
 
-    // Có thể NULL nếu đây là bảo trì đột xuất (không theo lịch)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id")
-    private MaintenanceSchedule schedule;
-
-    @Column(nullable = false)
     private String title;
-
-    @Column(columnDefinition = "TEXT")
     private String description;
+    private LocalDateTime dueDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private WorkOrderStatus status = WorkOrderStatus.OPEN;
-
-    private LocalDateTime scheduledDate;
-    private LocalDateTime completedAt;
+    private WorkOrderStatus status;
 }
