@@ -4,7 +4,9 @@ import equipment_management.equipment.dto.UnscheduledWorkOrderRequest;
 import equipment_management.equipment.dto.WorkOrderResponse;
 import equipment_management.equipment.dto.WorkOrderUpdateRequest;
 import equipment_management.equipment.entity.Equipment;
+import equipment_management.equipment.entity.MaintenanceSchedule;
 import equipment_management.equipment.entity.WorkOrder;
+import equipment_management.equipment.enums.MaintenanceStatus;
 import equipment_management.equipment.enums.WorkOrderStatus;
 import equipment_management.equipment.repository.EquipmentRepository;
 import equipment_management.equipment.repository.WorkOrderRepository;
@@ -61,7 +63,17 @@ public class WorkOrderService {
         if (request.title() != null) order.setTitle(request.title());
         if (request.description() != null) order.setDescription(request.description());
         if (request.dueDate() != null) order.setDueDate(request.dueDate());
-        if (request.status() != null) order.setStatus(WorkOrderStatus.valueOf(request.status()));
+        if (request.status() != null) {
+            WorkOrderStatus newStatus = WorkOrderStatus.valueOf(request.status());
+            order.setStatus(newStatus);
+
+            // Nếu work order được đóng (CLOSED) và nó có liên kết với maintenance schedule
+            if (newStatus == WorkOrderStatus.CLOSED && order.getMaintenanceSchedule() != null) {
+                MaintenanceSchedule schedule = order.getMaintenanceSchedule();
+                schedule.setStatus(MaintenanceStatus.COMPLETED);
+                // Không cần gọi save riêng vì @Transactional sẽ tự động flush
+            }
+        }
         return convertToResponse(workOrderRepository.save(order));
     }
 
